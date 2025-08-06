@@ -1,0 +1,44 @@
+name: skopeo
+on:
+  workflow_dispatch: # 手动触发
+  # schedule:
+  #   - cron: "33 5 * * 5"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    # 增加可用磁盘空间
+    - name: Maximize build space
+      uses: easimon/maximize-build-space@master
+      with:
+
+        root-reserve-mb: 2048
+        swap-size-mb: 128
+        remove-dotnet: 'true'
+        remove-haskell: 'true'
+        # 如果空间还是不够用，可以把以下开启，清理出更多空间
+        remove-android: 'true'
+        remove-codeql: 'true'
+        build-mount-path: '/var/lib/docker/'
+
+    - name: Restart docker
+      run: sudo service docker restart
+
+    - name: 检出代码
+      uses: actions/checkout@v2
+
+    - name: Install skopeo
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y skopeo
+
+    - name: Login to docker.cnb.cool with skopeo
+      run: |
+        skopeo login -u cnb docker.cnb.cool -p ${{ secrets.DOCKER_REGISTRY_TOKEN }}
+
+    - name: skopeo sync
+      run: |
+        skopeo copy docker://guiji2025/heygem.ai docker://docker.cnb.cool/xkand/guiji2025/heygem.ai  
+        skopeo copy docker://guiji2025/fun-asr docker://docker.cnb.cool/xkand/guiji2025/fun-asr
+        skopeo copy docker://guiji2025/fish-speech-ziming docker://docker.cnb.cool/xkand/guiji2025/fish-speech-ziming
