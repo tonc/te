@@ -39,6 +39,5 @@ jobs:
 
     - name: skopeo sync
       run: |
-        skopeo copy docker://guiji2025/heygem.ai docker://docker.cnb.cool/xkand/guiji2025/heygem.ai  
-        skopeo copy docker://guiji2025/fun-asr docker://docker.cnb.cool/xkand/guiji2025/fun-asr
-        skopeo copy docker://guiji2025/fish-speech-ziming docker://docker.cnb.cool/xkand/guiji2025/fish-speech-ziming
+        skopeo copy docker://guiji2025/fish-speech-5090 docker://docker.cnb.cool/xkand/guiji2025/fish-speech-5090
+        skopeo copy docker://guiji2025/heygem.ai-5090 docker://docker.cnb.cool/xkand/guiji2025/heygem.ai-5090
